@@ -1,4 +1,4 @@
-package azureblobupload;
+package com.deviceinsight.azureblobupload;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
