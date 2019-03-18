@@ -25,7 +25,14 @@ Check that the file has been uploaded
 curl https://sthteststaticwebsite.z6.web.core.windows.net/
 ....
 
-Integrate it with the existing project
+== Integrate it with the existing project
+
+=== Maven
+
+1. Add dependency to dependencies tag.
+
+2. Add plugin section to build/plugins section in your pom.xml
+
 ....
 <dependency>
     <groupId>com.deviceinsight</groupId>
@@ -57,4 +64,10 @@ Integrate it with the existing project
         </plugin>
     </plugins>
 </build>
+....
+
+Configuration parameter 'connectionString' should be of form:
+
+....
+DefaultEndpointsProtocol=https;AccountName=sthteststaticwebsite;AccountKey=xxx;EndpointSuffix=core.windows.net
 ....

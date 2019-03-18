@@ -1,7 +1,10 @@
 package azureblobupload;
 
+import com.microsoft.azure.storage.AccessCondition;
 import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.BlobRequestOptions;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.apache.maven.plugin.AbstractMojo;
@@ -67,6 +70,7 @@ public class UploadMojo extends AbstractMojo {
 		final String cloudStoragePath = file.toString().substring(rootDir.length()+1);
 		try {
 			final CloudBlockBlob blob = container.getBlockBlobReference(cloudStoragePath);
+			blob.getProperties().setContentType("text/html");
 			blob.uploadFromFile(realPath);
 			log.info(String.format("Content of '%s' send to '%s'", realPath, cloudStoragePath));
 		} catch (URISyntaxException | StorageException | IOException ex) {
