@@ -1,10 +1,7 @@
 package azureblobupload;
 
-import com.microsoft.azure.storage.AccessCondition;
 import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.BlobRequestOptions;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.apache.maven.plugin.AbstractMojo;
@@ -28,8 +25,14 @@ public class UploadMojo extends AbstractMojo {
 	@Parameter(property = "connectionString", required = true)
 	public String connectionString;
 
-	@Parameter(property = "rootDir", required = true /*TODO*/)
+	@Parameter(property = "rootDir", required = true)
 	public String rootDir;
+
+	@Parameter(property = "version")
+	public String version;
+
+	@Parameter(property = "tenant")
+	public String tenant;
 
 	@Override
 	public void execute() throws MojoExecutionException {
@@ -44,7 +47,7 @@ public class UploadMojo extends AbstractMojo {
 				.createCloudBlobClient()
 				.getContainerReference("$web");
 			for (Path file : files) {
-				sendFileTocloud(container, file);
+				sendFileToCloud(container, file, version, tenant);
 			}
 		} catch (StorageException ex) {
 			log.error(ex);
@@ -62,12 +65,19 @@ public class UploadMojo extends AbstractMojo {
 		}
 	}
 
-	private void sendFileTocloud(CloudBlobContainer container, Path file) throws MojoExecutionException {
+	private void sendFileToCloud(
+		CloudBlobContainer container,
+		Path file,
+		String version,
+		String tenant
+	) throws MojoExecutionException {
 		if (!Files.isRegularFile(file)) {
 			return;
 		}
+		final String tenantPrefix = tenant != null ? tenant + "/" : "";
+		final String versionPrefix = version != null ? version + "/" : "";
 		final String realPath = file.toString();
-		final String cloudStoragePath = file.toString().substring(rootDir.length()+1);
+		final String cloudStoragePath = tenantPrefix + versionPrefix + file.toString().substring(rootDir.length()+1);
 		try {
 			final CloudBlockBlob blob = container.getBlockBlobReference(cloudStoragePath);
 			blob.getProperties().setContentType("text/html");
