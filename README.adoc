@@ -1,26 +1,36 @@
+= General
+
+Use this Maven plugin to recursivly upload the contents of a directory to an Azure blob storage container.
+This is for example useful if you use the "Static website" feature for serving web resources.
+
 = Usage
 
-Checkout repository
+This plugin is available on Maven Central.
 
 ....
-git clone https://github.com/deviceinsight/azure-blob-upload-maven-plugin
-cd azure-blob-upload-maven-plugin
+<build>
+  <plugins>
+    ...
+    <plugin>
+      <groupId>com.deviceinsight.azure</groupId>
+      <artifactId><azure-blob-upload-maven-plugin/artifactId>
+      <version>1.0.0</version>
+      <executions>
+        <execution>
+          <id>upload</id>
+          <phase>deploy</phase>
+          <goals>
+            <goal>upload</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <connectionString>DefaultEndpointsProtocol=https;AccountName=someaccountname;AccountKey=somekey;EndpointSuffix=core.windows.net</connectionString>
+        <rootDir>somedir</rootDir>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 ....
 
-Install maven plugin
-
-....
-mvn clean install
-....
-
-Execute locally
-
-....
-mvn com.deviceinsight:azure-blob-upload-maven-plugin:1.0-SNAPSHOT:upload -Dcontents=hello-from-maven -DconnectionString='DefaultEndpointsProtocol=https;AccountName=sthteststaticwebsite;AccountKey=xxx;EndpointSuffix=core.windows.net'
-....
-
-Check that the file has been uploaded
-
-....
-curl https://sthteststaticwebsite.z6.web.core.windows.net/
-....
+`somedir` is the directory you want to upload. `connectionString` is the Azure connection string.
