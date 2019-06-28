@@ -34,3 +34,11 @@ This plugin is available on Maven Central.
 ....
 
 `somedir` is the directory you want to upload. `connectionString` is the Azure connection string.
+
+= Releasing
+
+The plugin can be released using:
+
+....
+mvn deploy -Prelease
+....
