@@ -42,3 +42,37 @@ The plugin can be released using:
 ....
 mvn deploy -Prelease
 ....
+
+Integrate it with the existing project
+....
+<dependency>
+    <groupId>com.deviceinsight</groupId>
+    <artifactId>azure-blob-upload-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+....
+
+....
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.deviceinsight</groupId>
+            <artifactId>azure-blob-upload-maven-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <executions>
+                <execution>
+                    <id>upload</id>
+                    <phase>deploy</phase>
+                    <goals>
+                        <goal>upload</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <connectionString>test</connectionString>
+                <rootDir>test</rootDir>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+....

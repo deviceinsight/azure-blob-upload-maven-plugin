@@ -1,0 +1,73 @@
+= Usage
+
+Checkout repository
+
+....
+git clone https://github.com/deviceinsight/azure-blob-upload-maven-plugin
+cd azure-blob-upload-maven-plugin
+....
+
+Install maven plugin
+
+....
+mvn clean install
+....
+
+Execute locally
+
+....
+mvn com.deviceinsight:azure-blob-upload-maven-plugin:1.0-SNAPSHOT:upload -Dcontents=hello-from-maven -DconnectionString='DefaultEndpointsProtocol=https;AccountName=sthteststaticwebsite;AccountKey=xxx;EndpointSuffix=core.windows.net'
+....
+
+Check that the file has been uploaded
+
+....
+curl https://sthteststaticwebsite.z6.web.core.windows.net/
+....
+
+== Integrate it with the existing project
+
+=== Maven
+
+1. Add dependency to dependencies tag.
+
+2. Add plugin section to build/plugins section in your pom.xml
+
+....
+<dependency>
+    <groupId>com.deviceinsight</groupId>
+    <artifactId>azure-blob-upload-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+....
+
+....
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.deviceinsight</groupId>
+            <artifactId>azure-blob-upload-maven-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <executions>
+                <execution>
+                    <id>upload</id>
+                    <phase>deploy</phase>
+                    <goals>
+                        <goal>upload</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <connectionString>test</connectionString>
+                <rootDir>test</rootDir>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+....
+
+Configuration parameter 'connectionString' should be of form:
+
+....
+DefaultEndpointsProtocol=https;AccountName=sthteststaticwebsite;AccountKey=xxx;EndpointSuffix=core.windows.net
+....
