@@ -13,7 +13,7 @@ This plugin is available on Maven Central.
     ...
     <plugin>
       <groupId>com.deviceinsight.azure</groupId>
-      <artifactId><azure-blob-upload-maven-plugin/artifactId>
+      <artifactId>azure-blob-upload-maven-plugin</artifactId>
       <version>1.0.0</version>
       <executions>
         <execution>
