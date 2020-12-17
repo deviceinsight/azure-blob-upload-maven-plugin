@@ -7,6 +7,28 @@ This is for example useful if you use the "Static website" feature for serving w
 
 This plugin is available on Maven Central.
 
+Using it interactively:
+
+....
+mvn com.deviceinsight.azure:azure-blob-upload-maven-plugin:2.0.0:upload \
+    -DconnectionString='DefaultEndpointsProtocol=https;AccountName=test;AccountKey=xxx;EndpointSuffix=core.windows.net' \ 
+    -DcontainerName=testcontainer \
+    -DrootDir=/tmp/contents
+....
+
+`rootDir` is the local directory you want to upload. `connectionString` is the Azure connection string. `containerName` is the container in the 
+storage acount that you want to upload into.
+
+Using it in your pom.xml:
+
+....
+<dependency>
+    <groupId>com.deviceinsight</groupId>
+    <artifactId>azure-blob-upload-maven-plugin</artifactId>
+    <version>2.0.0</version>
+</dependency>
+....
+
 ....
 <build>
   <plugins>
@@ -14,7 +36,7 @@ This plugin is available on Maven Central.
     <plugin>
       <groupId>com.deviceinsight.azure</groupId>
       <artifactId>azure-blob-upload-maven-plugin</artifactId>
-      <version>1.1.0</version>
+      <version>2.0.0</version>
       <executions>
         <execution>
           <id>upload</id>
@@ -27,13 +49,12 @@ This plugin is available on Maven Central.
       <configuration>
         <connectionString>DefaultEndpointsProtocol=https;AccountName=someaccountname;AccountKey=somekey;EndpointSuffix=core.windows.net</connectionString>
         <rootDir>somedir</rootDir>
+        <containerName>somecontainer</containerName>
       </configuration>
     </plugin>
   </plugins>
 </build>
 ....
-
-`somedir` is the directory you want to upload. `connectionString` is the Azure connection string.
 
 = Releasing
 
@@ -43,36 +64,3 @@ The plugin can be released using:
 mvn deploy -Prelease
 ....
 
-Integrate it with the existing project
-....
-<dependency>
-    <groupId>com.deviceinsight</groupId>
-    <artifactId>azure-blob-upload-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
-....
-
-....
-<build>
-    <plugins>
-        <plugin>
-            <groupId>com.deviceinsight</groupId>
-            <artifactId>azure-blob-upload-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <executions>
-                <execution>
-                    <id>upload</id>
-                    <phase>deploy</phase>
-                    <goals>
-                        <goal>upload</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <connectionString>test</connectionString>
-                <rootDir>test</rootDir>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-....

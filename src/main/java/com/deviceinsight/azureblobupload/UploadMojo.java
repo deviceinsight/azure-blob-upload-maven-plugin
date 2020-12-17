@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Mojo(name = "upload")
 public class UploadMojo extends AbstractMojo {
+
 	private final Log log = getLog();
 
 	@Parameter(property = "connectionString", required = true)
@@ -28,61 +29,43 @@ public class UploadMojo extends AbstractMojo {
 	@Parameter(property = "rootDir", required = true)
 	public String rootDir;
 
-	@Parameter(property = "version")
-	public String version;
-
-	@Parameter(property = "tenant")
-	public String tenant;
+	@Parameter(property = "containerName", required = true)
+	public String containerName;
 
 	@Override
 	public void execute() throws MojoExecutionException {
 		try {
 			log.info(String.format("Using root directory of: '%s'", Paths.get(rootDir).toAbsolutePath().toString()));
-			List<Path> files = Files
-				.walk(Paths.get(rootDir))
-				.collect(Collectors.toList());
+			List<Path> files = Files.walk(Paths.get(rootDir)).collect(Collectors.toList());
 
-			final CloudBlobContainer container = CloudStorageAccount
-				.parse(connectionString)
-				.createCloudBlobClient()
-				.getContainerReference("$web");
+			final CloudBlobContainer container = CloudStorageAccount.parse(connectionString)
+					.createCloudBlobClient()
+					.getContainerReference(containerName);
 			for (Path file : files) {
-				sendFileToCloud(container, file, version, tenant);
+				sendFileToCloud(container, file);
 			}
 		} catch (StorageException ex) {
 			log.error(ex);
-			throw new MojoExecutionException(String.format(
-				"Error returned from the service. Http code: %d and error code: %s",
-				ex.getHttpStatusCode(),
-				ex.getErrorCode()
-			), ex);
+			throw new MojoExecutionException(
+					String.format("Error returned from the service. Http code: %d and error code: %s",
+							ex.getHttpStatusCode(), ex.getErrorCode()), ex);
 		} catch (Exception ex) {
 			log.error(ex);
-			throw new MojoExecutionException(String.format(
-				"Error returned: %s",
-				ex.getMessage()
-			), ex);
+			throw new MojoExecutionException(String.format("Error returned: %s", ex.getMessage()), ex);
 		}
 	}
 
-	private void sendFileToCloud(
-		CloudBlobContainer container,
-		Path file,
-		String version,
-		String tenant
-	) throws MojoExecutionException {
+	private void sendFileToCloud(CloudBlobContainer container, Path file) throws MojoExecutionException {
 		if (!Files.isRegularFile(file)) {
 			return;
 		}
-		final String tenantPrefix = tenant != null ? tenant + "/" : "";
-		final String versionPrefix = version != null ? version + "/" : "";
 		final String realPath = file.toString();
-		final String cloudStoragePath = tenantPrefix + versionPrefix + file.toString().substring(rootDir.length()+1);
+		final String cloudStoragePath = file.toString().substring(rootDir.length() + 1);
 		try {
 			final CloudBlockBlob blob = container.getBlockBlobReference(cloudStoragePath);
 			blob.getProperties().setContentType("text/html");
 			blob.uploadFromFile(realPath);
-			log.info(String.format("Content of '%s' send to '%s'", realPath, cloudStoragePath));
+			log.info(String.format("Content of '%s' sent to '%s'", realPath, cloudStoragePath));
 		} catch (URISyntaxException | StorageException | IOException ex) {
 			throw new MojoExecutionException(ex.getMessage(), ex);
 		}
