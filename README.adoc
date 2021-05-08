@@ -56,6 +56,27 @@ Using it in your pom.xml:
 </build>
 ....
 
+Excluding files from upload:
+
+....
+<configuration>
+  <excludes>
+    <exclude>extensions/**/*</exclude>
+    <exclude>**/*.json</exclude>
+  </excludes>
+</configuration>
+....
+
+Only including certain files also works:
+
+....
+<configuration>
+  <includes>
+    <include>**/*.html</include>
+  </includes>
+</configuration>
+....
+
 = Releasing
 
 The plugin can be released using:
