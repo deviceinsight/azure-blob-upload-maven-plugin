@@ -63,7 +63,8 @@ public class UploadMojo extends AbstractMojo {
 		final String cloudStoragePath = file.toString().substring(rootDir.length() + 1);
 		try {
 			final CloudBlockBlob blob = container.getBlockBlobReference(cloudStoragePath);
-			blob.getProperties().setContentType("text/html");
+			final String mediaType = Files.probeContentType(file);
+			blob.getProperties().setContentType(mediaType);
 			blob.uploadFromFile(realPath);
 			log.info(String.format("Content of '%s' sent to '%s'", realPath, cloudStoragePath));
 		} catch (URISyntaxException | StorageException | IOException ex) {
