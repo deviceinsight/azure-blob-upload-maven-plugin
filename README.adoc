@@ -10,7 +10,7 @@ This plugin is available on Maven Central.
 Using it interactively:
 
 ....
-mvn com.deviceinsight.azure:azure-blob-upload-maven-plugin:2.0.0:upload \
+mvn com.deviceinsight.azure:azure-blob-upload-maven-plugin:2.1.0:upload \
     -DconnectionString='DefaultEndpointsProtocol=https;AccountName=test;AccountKey=xxx;EndpointSuffix=core.windows.net' \ 
     -DcontainerName=testcontainer \
     -DrootDir=/tmp/contents
@@ -25,7 +25,7 @@ Using it in your pom.xml:
 <dependency>
     <groupId>com.deviceinsight</groupId>
     <artifactId>azure-blob-upload-maven-plugin</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ....
 
@@ -36,7 +36,7 @@ Using it in your pom.xml:
     <plugin>
       <groupId>com.deviceinsight.azure</groupId>
       <artifactId>azure-blob-upload-maven-plugin</artifactId>
-      <version>2.0.0</version>
+      <version>2.1.0</version>
       <executions>
         <execution>
           <id>upload</id>
